@@ -25,21 +25,24 @@ def add_task():
     character_count_label.pack()
 
     # Function to update the character count label
-    def update_character_count(event):
-        character_count = len(task_description_text.get("1.0", tk.END))
+    def update_character_count(event=None):
+        character_count = len(task_description_text.get("1.0", tk.END).strip())  # Trim whitespace characters
         remaining_count = CHARACTER_LIMIT - character_count
         character_count_label.config(text=f"{character_count}/{CHARACTER_LIMIT} symbols left")
         if remaining_count < 0:
             character_count_label.config(fg="red")
         else:
             character_count_label.config(fg="black")
+
+    # Call the update_character_count function initially to set the correct character count
+    update_character_count()
     
     # Bind a function to the text widget to update character count
     task_description_text.bind("<KeyRelease>", update_character_count)
     
     # Function to validate the description field and limit character count
     def validate_description(P):
-        description = task_description_text.get("1.0", tk.END)
+        description = task_description_text.get("1.0", tk.END).strip()  # Trim whitespace characters
         character_count = len(description)
         if character_count > CHARACTER_LIMIT:
             # Play a noise to indicate the character limit is exceeded
@@ -47,6 +50,9 @@ def add_task():
             description = description[:CHARACTER_LIMIT]  # Trim the description
             task_description_text.delete("1.0", tk.END)
             task_description_text.insert("1.0", description)
+        
+        # Rebind the <KeyRelease> event to update character count dynamically
+        task_description_text.bind("<KeyRelease>", update_character_count)
         return True
     
     # Bind a function to the text widget to validate character count
@@ -108,21 +114,24 @@ def edit_task():
         character_count_label.pack()
         
         # Function to update the character count label
-        def update_character_count(event):
-            character_count = len(task_description_text.get("1.0", tk.END))
+        def update_character_count(event=None):
+            character_count = len(task_description_text.get("1.0", tk.END).strip())  # Trim whitespace characters
             remaining_count = CHARACTER_LIMIT - character_count
             character_count_label.config(text=f"{character_count}/{CHARACTER_LIMIT} symbols left")
             if remaining_count < 0:
                 character_count_label.config(fg="red")
             else:
                 character_count_label.config(fg="black")
+
+        # Call the update_character_count function initially to set the correct character count
+        update_character_count()
         
         # Bind a function to the text widget to update character count
         task_description_text.bind("<KeyRelease>", update_character_count)
         
         # Function to validate the description field and limit character count
         def validate_description(P):
-            description = task_description_text.get("1.0", tk.END)
+            description = task_description_text.get("1.0", tk.END).strip()  # Trim whitespace characters
             character_count = len(description)
             if character_count > CHARACTER_LIMIT:
                 # Play a noise to indicate the character limit is exceeded
@@ -130,8 +139,11 @@ def edit_task():
                 description = description[:CHARACTER_LIMIT]  # Trim the description
                 task_description_text.delete("1.0", tk.END)
                 task_description_text.insert("1.0", description)
+            
+            # Rebind the <KeyRelease> event to update character count dynamically
+            task_description_text.bind("<KeyRelease>", update_character_count)
             return True
-        
+    
         # Bind a function to the text widget to validate character count
         task_description_text.bind("<KeyRelease>", validate_description)
         
